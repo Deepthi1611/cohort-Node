@@ -1,0 +1,19 @@
+{
+  "name": "week-17-postgres",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tsc -b && node ./dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@types/pg": "^8.16.0",
+    "pg": "^8.17.2",
+    "typescript": "^5.9.3"
+  }
+}
