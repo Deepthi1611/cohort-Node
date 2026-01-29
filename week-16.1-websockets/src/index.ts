@@ -16,8 +16,6 @@ wss.on('connection', function connection(socket) {
     
     // when a message is received from the client
     socket.on('message', function message(data) {
-        console.log('received: %s', data);
-        socket.send(`Echo: ${data}`);
+        if(data.toString() === 'ping') socket.send('pong');
     });
-
 });
