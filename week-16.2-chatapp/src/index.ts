@@ -47,6 +47,7 @@ sockets.on("connection", (socket: WebSocket) => {
             console.log('current room:', currentRoom);
             // filter all sockets in the same room
             const socketsInRoom = allSockets.filter(s => s.room === currentRoom);
+            console.log('sockets in room:', socketsInRoom);
             // send the message to all sockets in the same room
             socketsInRoom.forEach((s) => {
                 s.socket.send(`User says: ${parsedMessage.payload.message}`);
