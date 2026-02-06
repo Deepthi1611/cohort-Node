@@ -5,7 +5,11 @@
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      // .next is the output folder for the web app but we need to add output folder for BE also
+      // "outputs": [".next/**", "!.next/cache/**"]
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
+      // we can also write another turbo.json inside the backend and extend this turbo.json and add the output folder there
+      // in case of react applications, we have to add dist folder as output folder of react folder is also dist
     },
     "lint": {
       "dependsOn": ["^lint"]
