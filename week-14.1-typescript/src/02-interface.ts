@@ -106,6 +106,7 @@ class Manager implements Person {
 // Lets you program against abstractions (Person) while swapping implementations (Manager, Employee, etc.).
 
 // we can implements interfaces using classes but not types
+// we can extend interface from another interface interface a1 extends a2 where a2 is also an interface - kind of intersection
 
 // ABSTRACT CLASSES
 abstract class Users {
@@ -143,6 +144,18 @@ console.log(obj.greet())
 // TYPES
 // types are used to aggregate data together
 // Differences - we can implement interface in a class but we cannot do that with types,
+
+type Rect = {
+    length: number,
+    breadth: number
+}
+
+// rectangle is of type Rect
+let rectangle: Rect = {
+    length: 11,
+    breadth: 22,
+}
+
 // types let us use unions and intersections
 
 // intersection - type that has all properties of multiple types
@@ -193,7 +206,27 @@ type B = { z: string };
 
 type U = A | B;
 const v: U = { x: 1, z: "hi" };
+// const v: U = { x: 1, z: "hi", 'extra': 'extra' }; // error as extra is not present any of the types
 //  for unions of object types, object-literal checking is permissive if each provided property belongs to at least one union member.
+// For a union target (A | B), TS uses a permissive rule:
+// each provided property must exist in some union member.
+// for intersection it should contain all properties of all interfaces/types
 
 // for interfaces we need type to use union or intersection on top of it but inside the interface -
 //  for properties inside the interface we can directly use union or intersection operator
+
+// If you want stricter behavior, use a discriminated union
+type A2 = { kind: "a"; x: number; y: number };
+type B2 = { kind: "b"; z: string };
+type U2 = A2 | B2;
+// U2 accepts only these two shape families:
+
+// A2 shape: must have kind: "a", x (number), y (number)
+// B2 shape: must have kind: "b", z (string)
+const v1: U2 = { kind: "a", x: 1, y: 11 };
+const v2: U2 = { kind: "a", x: 0, y: -5 };
+const v3: U2 = { kind: "b", z: "hi" };
+const v4: U2 = { kind: "b", z: "" };
+// const ex: U2 = { x: 1, z: "hi" } //error
+// Now mixed shapes like { x: 1, z: "hi" } won’t match
+// kind can have any one type strictly and completely - either A2 or B2 but not both 
