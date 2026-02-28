@@ -104,3 +104,96 @@ class Manager implements Person {
 // Compile-time guarantee the class has required fields/methods.
 // Better structure for behavior (methods, inheritance, encapsulation), not just data shape.
 // Lets you program against abstractions (Person) while swapping implementations (Manager, Employee, etc.).
+
+// we can implements interfaces using classes but not types
+
+// ABSTRACT CLASSES
+abstract class Users {
+    constructor(public name: string, public phone?: string){ // phone optional
+        this.name = name
+        this.phone = phone
+    }
+    greet():string {
+        return 'hello'
+    }
+    abstract getRole(): string
+}
+// abstract class is like blueprint
+class User3 extends Users {
+    constructor(public name: string) {
+        super(name)
+    }
+    // greet(): string {
+    //     return 'hii'
+    // }
+    getRole(): string {
+        return 'manager'
+    }
+}
+
+let obj = new User3('Deepu')
+// we can call parent methods from subclass object
+console.log(obj.greet())
+
+// but in abstract classes we can give default implementations as well unlike interfaces
+// Mandatory for subclasses: members marked abstract in the abstract class.
+// Not mandatory: concrete members (normal methods/properties with implementation/value) are inherited as-is.
+
+
+// TYPES
+// types are used to aggregate data together
+// Differences - we can implement interface in a class but we cannot do that with types,
+// types let us use unions and intersections
+
+// intersection - type that has all properties of multiple types
+type Employee = {
+    name: string,
+    startDate: string
+}
+
+type Managers = {
+    name: string,
+    department: string
+}
+
+// intersection of types
+type teamlead = Employee & Managers
+
+let t: teamlead = {
+    name: 'Srikar',
+    startDate: '12-12-2001',
+    department: 'engineering',
+    // age: 22 - error for extra property
+}
+
+// union
+type GoodUser = {
+    name: string,
+    gift: string
+}
+
+type badUser = {
+    name: string,
+    ip: string
+}
+
+type u = GoodUser | badUser
+
+// union can have either or all the values
+// it can have properties of A or B or both
+let u1: u = {
+    name: 'srikar',
+    gift: 'random',
+    ip: '111',
+    // random: 'randd' - error for extra property
+}
+
+type A = { x: number; y: number };
+type B = { z: string };
+
+type U = A | B;
+const v: U = { x: 1, z: "hi" };
+//  for unions of object types, object-literal checking is permissive if each provided property belongs to at least one union member.
+
+// for interfaces we need type to use union or intersection on top of it but inside the interface -
+//  for properties inside the interface we can directly use union or intersection operator
