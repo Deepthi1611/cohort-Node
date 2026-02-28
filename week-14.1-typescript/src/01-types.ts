@@ -81,7 +81,7 @@ type user = {
 // and use the above as type for argument in greets function
 // we can also define interface rather than type and also use that as an type for the object
 
-interface users {
+interface Users {
     name: string,
     age: number
 }
@@ -91,7 +91,7 @@ type userType = {
     age: number
 }
 
-let user1: user = {
+let user1: Users = {
     name: 'Deepthi',
     age: 24
 }
@@ -99,6 +99,7 @@ let user1: user = {
 // with types we can use union operator, we cannot use union operator with interfaces
 type stringOrNumber = string | number
 
+// type narrowing
 function sum(a: stringOrNumber, b: stringOrNumber): stringOrNumber {
     if (typeof a === "number" && typeof b === "number") {
         return a + b; // number
