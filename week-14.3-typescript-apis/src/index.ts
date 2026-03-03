@@ -49,3 +49,66 @@ let user1: user = {
 // another use case is configuration objects, we can use readonly to make sure that the configuration object is not changed after it's created
 
 // Record and Map
+type Users = {
+    [key: number]: {
+        name: string;
+        age: number;
+    }
+}
+
+const users = {
+    1: { name: 'John', age: 30 },
+    2: { name: 'Jane', age: 25 },
+    3: { name: 'Bob', age: 40 }
+}
+
+// Record gives cleaner type to objects
+type User1 = {
+    name: string;
+    age: number;
+}
+
+// Record is typescript's way of defining an object with a specific key type and value type, 
+// it is a more concise way of defining an object with a specific key type and value type, 
+// it is also more flexible than the previous example because we can use any type for the keys and values, 
+// not just numbers and objects.
+// Record instead of Users type
+// Record takes two arguments, the first is the type of the keys and the second is the type of the values
+type Users1 = Record<number, User1>;
+
+// Map is a built-in JavaScript object that allows us to store key-value pairs and provides methods to manipulate them. In TypeScript, 
+// we can use the Map type to define the types of the keys and values in a Map object.
+const usersMap1 = new Map()
+usersMap1.set(1, { name: 'John', age: 30 });
+usersMap1.set(2, { name: 'Jane', age: 25 });
+usersMap1.set(3, { name: 'Bob', age: 40 });
+
+usersMap1.get(1); // { name: 'John', age: 30 }
+usersMap1.delete(2); // true
+
+// Map is more flexible than Record because it allows us to use any type for the keys and values, 
+// not just numbers and objects. However, Record is more concise and easier to read when we know the types of the keys and values in advance.
+// initialize a Map with specific types for keys and values
+const usersMap = new Map<number, User1>();
+usersMap.set(1, { name: 'John', age: 30 });
+usersMap.set(2, { name: 'Jane', age: 25 });
+usersMap.set(3, { name: 'Bob', age: 40 });
+
+usersMap.get(1); // { name: 'John', age: 30 }
+usersMap.delete(2); // true
+
+// Exclude API
+type eventTypes = 'click' | 'hover' | 'scroll' | 'keydown';
+
+// exclude takes a type and a union of types and returns a new type that excludes the types in the union
+type mouseEventTypes = Exclude<eventTypes, 'keydown'>; // 'click' | 'hover' | 'scroll'
+
+const handleEvent = (event: mouseEventTypes) => { 
+    // handle mouse events
+}
+
+// Extract API
+// extract takes a type and a union of types and returns a new type that includes only the types in the union
+type keyboardEventTypes = Extract<eventTypes, 'keydown'>; // 'keydown'
+
+// Type inference in Zod - check slides
