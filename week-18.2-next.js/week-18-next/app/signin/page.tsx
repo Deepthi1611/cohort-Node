@@ -1,6 +1,43 @@
+"use client";
+
 import Link from "next/link";
+import { FormEvent, useState } from "react";
 
 export default function SignInPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  async function handleSignIn(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setError("");
+    setSuccess("");
+    setIsLoading(true);
+
+    try {
+      const response = await fetch("/api/v1/signin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(data.message ?? "Sign in failed");
+      }
+
+      setSuccess(data.message ?? "Signed in successfully.");
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Something went wrong.";
+      setError(message);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   return (
     <main className="relative min-h-screen overflow-hidden bg-slate-950 px-4 py-10 sm:px-6 lg:px-8">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,_#2563eb33_0,_transparent_48%),radial-gradient(circle_at_bottom_left,_#14b8a633_0,_transparent_42%)]" />
@@ -10,7 +47,7 @@ export default function SignInPage() {
           <div className="hidden bg-gradient-to-br from-cyan-400 via-blue-500 to-indigo-600 p-10 text-white md:flex md:flex-col md:justify-between">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/80">
-                Cohort App
+                To-Do App
               </p>
               <h1 className="mt-4 text-4xl font-bold leading-tight">
                 Welcome back.
@@ -36,7 +73,7 @@ export default function SignInPage() {
               </p>
             </div>
 
-            <form className="space-y-5">
+            <form onSubmit={handleSignIn} className="space-y-5">
               <div>
                 <label
                   htmlFor="email"
@@ -47,7 +84,10 @@ export default function SignInPage() {
                 <input
                   id="email"
                   type="email"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
                   placeholder="you@example.com"
+                  required
                   className="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-4 py-2.5 text-sm text-white outline-none transition focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/30"
                 />
               </div>
@@ -62,7 +102,10 @@ export default function SignInPage() {
                 <input
                   id="password"
                   type="password"
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
                   placeholder="••••••••"
+                  required
                   className="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-4 py-2.5 text-sm text-white outline-none transition focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/30"
                 />
               </div>
@@ -82,10 +125,14 @@ export default function SignInPage() {
 
               <button
                 type="submit"
+                disabled={isLoading}
                 className="w-full rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-4 py-2.5 text-sm font-semibold text-slate-950 transition hover:brightness-105 active:scale-[0.99]"
               >
-                Sign In
+                {isLoading ? "Signing In..." : "Sign In"}
               </button>
+
+              {error ? <p className="text-sm text-rose-300">{error}</p> : null}
+              {success ? <p className="text-sm text-emerald-300">{success}</p> : null}
             </form>
 
             <p className="mt-6 text-center text-sm text-slate-300">
