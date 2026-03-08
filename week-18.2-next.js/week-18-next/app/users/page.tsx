@@ -2,11 +2,13 @@
 // Browser Network tab only shows browser-made calls, not server-to-server calls.
 // api calls made in server components are not visible in the browser's network tab,
 // but they are visible in the terminal where the Next.js server is running.
+import axios from "axios";
 
 async function getUsers() {
-  const res = await fetch("https://jsonplaceholder.typicode.com/users");
-  const data = await res.json();
-  return data;
+  // this sends a request to the Next.js server, which then sends a request to the API route 
+  // defined in app/api/v1/user/details/route.ts
+  const res = await axios.get("http://localhost:3000/api/v1/user/details");
+  return res.data;
 }
 
 export default async function Users() {
@@ -14,12 +16,8 @@ export default async function Users() {
   return (
     <div>
       <h1>users</h1>
-      {users.map((user: any) => (
-        <div key={user.id}>
-          <h2>{user.name}</h2>
-          <p>{user.email}</p>
-        </div>
-      ))}
+      <p>Name: {users.name}</p>
+      <p>Email: {users.email}</p>
     </div>
   );
 }
